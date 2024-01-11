@@ -11,6 +11,29 @@ export class PluggyApi {
     this.clientId = scriptProperties['clientId'];
     this.clientSecret = scriptProperties['clientSecret'];
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  doRequest(method: string, apiUrl: string, options: any = {}) {
+    try {
+      const apiKey = this.getPluggyApiKey();
+
+      const defaultOptions = {
+        method: method,
+        headers: {
+          'X-API-KEY': apiKey,
+        },
+      };
+
+      const response = UrlFetchApp.fetch(`${this.baseUrl}${apiUrl}`, {
+        ...defaultOptions,
+        ...options,
+      });
+
+      return JSON.parse(response.getContentText());
+    } catch (e) {
+      Logger.log('Pluggy api error ' + e);
+    }
+  }
+
   getPluggyApiKey() {
     const apiKey = this.scriptCache.retrieveFromCache('apiKey');
     const apiKeyCreationDate = new Date(this.scriptCache.retrieveFromCache('apiKeyCreationDate'));

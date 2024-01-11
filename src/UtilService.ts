@@ -8,6 +8,17 @@ export class UtilService {
     return `${year}-${month}-${day}`;
   }
 
+  static requestUserData(message: string) {
+    const prompt = SpreadsheetApp.getUi().prompt(
+      message,
+      SpreadsheetApp.getUi().ButtonSet.OK_CANCEL,
+    );
+    if (prompt.getSelectedButton() !== SpreadsheetApp.getUi().Button.OK) {
+      return undefined;
+    }
+    return prompt.getResponseText().trim();
+  }
+
   static getSheetByName(name: string): GoogleAppsScript.Spreadsheet.Sheet {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = spreadsheet.getSheetByName(name);
