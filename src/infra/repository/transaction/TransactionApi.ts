@@ -2,23 +2,19 @@ import { CreditCardMetadata, Transaction } from '../../../domain/transaction/Tra
 import { PluggyApi } from '../PluggyApi';
 
 export class TransactionApi {
-  constructor(
-    private readonly pluggyApi = new PluggyApi(),
-    private readonly baseUrl = 'https://api.pluggy.ai',
-  ) {}
+  constructor(private readonly pluggyApi = new PluggyApi()) {}
 
   listBetweenDates(accountId: string, from: Date, to: Date): Transaction[] {
-    const apiKey = this.pluggyApi.getPluggyApiKey();
+    const response = this.pluggyApi.doRequest(
+      'GET',
+      `/transactions?accountId=${accountId}&from=${Utilities.formatDate(
+        from,
+        'GMT-3',
+        'yyyy-MM-dd',
+      )}&to=${Utilities.formatDate(to, 'GMT-3', 'yyyy-MM-dd')}&page=${1}&pageSize=${500}`,
+    );
 
-    const url = `${this.baseUrl}/transactions?accountId=${accountId}&from=${Utilities.formatDate(
-      from,
-      'GMT-3',
-      'yyyy-MM-dd',
-    )}&to=${Utilities.formatDate(to, 'GMT-3', 'yyyy-MM-dd')}&page=${1}&pageSize=${500}`;
-
-    const response = UrlFetchApp.fetch(url, { headers: { 'X-API-KEY': apiKey } });
-
-    return JSON.parse(response.getContentText()).results.map((t: never) => {
+    return response.results.map((t: never) => {
       const metaData = t['creditCardMetadata'];
       return new Transaction(
         t['id'],
