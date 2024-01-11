@@ -1,4 +1,5 @@
 import { UtilService } from '../../UtilService';
+import { TransactionResponse } from '../../application/transaction/TransactionResponse';
 
 export class CreditCardSpreadsheetRepository {
   listTransactionsIds(): string[] {
@@ -10,14 +11,21 @@ export class CreditCardSpreadsheetRepository {
       .flatMap((t) => t);
   }
 
-  appendTransactions(transactions: (string | number)[][]): void {
+  appendTransactions(transactions: TransactionResponse[][]): void {
     const sheet = UtilService.getSheetByName('CreditCard');
     const lastRow = sheet.getLastRow();
 
+    const sheetData: (string | Date | number)[][] = transactions.map((t) => [
+      t[0].id,
+      t[0].date,
+      t[0].description,
+      t[0].category,
+      t[0].type,
+      t[0].amount,
+    ]);
+
     if (transactions.length)
-      sheet
-        .getRange(lastRow + 1, 1, transactions.length, transactions[0].length)
-        .setValues(transactions);
+      sheet.getRange(lastRow + 1, 1, sheetData.length, sheetData[0].length).setValues(sheetData);
 
     UtilService.sortSheet(2, true);
   }
