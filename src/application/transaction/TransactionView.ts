@@ -1,13 +1,13 @@
-import { TransactionController } from './transaction/TransactionController';
-import { CreditCardSpreadsheetRepository } from '../infra/repository/CreditCardSpreadsheetRepository';
+import { TransactionController } from './TransactionController';
+import { TransactionSpreadsheetRepository } from '../../infra/repository/transaction/TransactionSpreadsheetRepository';
 
-export class CreditCardView {
+export class TransactionView {
   constructor(
     private readonly transactionController = new TransactionController(),
-    private readonly creditCardSpreadsheetRepository = new CreditCardSpreadsheetRepository(),
+    private readonly transactionSpreadsheetRepository = new TransactionSpreadsheetRepository(),
   ) {}
 
-  public appendNewAvailableTransactions() {
+  public appendNewTransactions() {
     const today = new Date();
     const aHundredDaysBefore = new Date(today.getTime() - 100 * 24 * 60 * 60 * 1000);
     const transactionsResponse = this.transactionController.listBetweenDates(
@@ -16,13 +16,14 @@ export class CreditCardView {
       today,
     );
 
-    const alreadyListedTransactions = this.creditCardSpreadsheetRepository.listTransactionsIds();
+    const alreadyListedTransactions =
+      this.transactionSpreadsheetRepository.listTransactionsIdsFromSheet();
 
     const uniqueTransactions = transactionsResponse.filter(
       (t) => !alreadyListedTransactions.includes(t[0]['id']),
     );
 
     // Logger.log(uniqueTransactions);
-    this.creditCardSpreadsheetRepository.appendTransactions(uniqueTransactions);
+    this.transactionSpreadsheetRepository.appendTransactions(uniqueTransactions);
   }
 }

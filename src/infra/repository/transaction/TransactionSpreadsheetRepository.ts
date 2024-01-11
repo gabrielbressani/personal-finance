@@ -1,9 +1,9 @@
-import { UtilService } from '../../UtilService';
-import { TransactionResponse } from '../../application/transaction/TransactionResponse';
+import { UtilService } from '../../../UtilService';
+import { TransactionResponse } from '../../../application/transaction/TransactionResponse';
 
-export class CreditCardSpreadsheetRepository {
-  listTransactionsIds(): string[] {
-    const sheet = UtilService.getSheetByName('CreditCard');
+export class TransactionSpreadsheetRepository {
+  listTransactionsIdsFromSheet(sheetName: string = 'CreditCard'): string[] {
+    const sheet = UtilService.getSheetByName(sheetName);
     const lastRow = sheet.getLastRow();
     return sheet
       .getRange(2, 1, lastRow, 1)

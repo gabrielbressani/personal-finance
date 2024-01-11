@@ -1,4 +1,4 @@
-import { CreditCardView } from './application/CreditCardView';
+import { TransactionView } from './application/transaction/TransactionView';
 import { AccountView } from './application/AccountView';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -11,7 +11,7 @@ function onOpen() {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function appendNewAvailableTransactions() {
-  new CreditCardView().appendNewAvailableTransactions();
+  new TransactionView().appendNewTransactions();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
