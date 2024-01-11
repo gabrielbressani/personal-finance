@@ -1,20 +1,29 @@
 import { Transaction } from './Transaction';
 import { TransactionApi } from '../../infra/repository/transaction/TransactionApi';
+import { TransactionSpreadsheetRepository } from '../../infra/repository/transaction/TransactionSpreadsheetRepository';
 
 export class TransactionService {
-  constructor(private readonly transactionApi = new TransactionApi()) {}
+  constructor(
+    private readonly transactionApi = new TransactionApi(),
+    private readonly transactionSpreadsheetRepository = new TransactionSpreadsheetRepository(),
+  ) {}
 
   listBetweenDates(accountId: string, from: Date, to: Date): Transaction[] {
-    return this.transactionApi.listBetweenDates(accountId, from, to).flatMap((transaction) => {
-      if (transaction.creditCardMetadata) {
-        return this.split(
-          transaction,
-          transaction.creditCardMetadata.installmentNumber,
-          transaction.creditCardMetadata.totalInstallments,
-        );
-      }
-      return transaction;
-    });
+    const sheetsTransactions = this.transactionSpreadsheetRepository.listTransactionsIdsFromSheet();
+
+    return this.transactionApi
+      .listBetweenDates(accountId, from, to)
+      .filter((t) => !sheetsTransactions.includes(t.id))
+      .flatMap((transaction) => {
+        if (transaction.creditCardMetadata) {
+          return this.split(
+            transaction,
+            transaction.creditCardMetadata.installmentNumber,
+            transaction.creditCardMetadata.totalInstallments,
+          );
+        }
+        return transaction;
+      });
   }
 
   private split(t: Transaction, installmentNumber: number, totalInstallments: number) {

@@ -14,14 +14,21 @@ export class UtilService {
       SpreadsheetApp.getUi().ButtonSet.OK_CANCEL,
     );
     if (prompt.getSelectedButton() !== SpreadsheetApp.getUi().Button.OK) {
-      return undefined;
+      return '';
     }
     return prompt.getResponseText().trim();
   }
 
-  static getSheetByName(name: string): GoogleAppsScript.Spreadsheet.Sheet {
+  static getSheet(name: string | null = null): GoogleAppsScript.Spreadsheet.Sheet {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = spreadsheet.getSheetByName(name);
+
+    let sheet;
+    if (name) {
+      sheet = spreadsheet.getSheetByName(name);
+    } else {
+      sheet = spreadsheet.getActiveSheet();
+    }
+
     if (!sheet) throw new Error(`${name} not found`);
     return sheet;
   }

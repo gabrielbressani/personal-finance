@@ -2,8 +2,8 @@ import { UtilService } from '../../../UtilService';
 import { TransactionResponse } from '../../../application/transaction/TransactionResponse';
 
 export class TransactionSpreadsheetRepository {
-  listTransactionsIdsFromSheet(sheetName: string = 'CreditCard'): string[] {
-    const sheet = UtilService.getSheetByName(sheetName);
+  listTransactionsIdsFromSheet(): string[] {
+    const sheet = UtilService.getSheet();
     const lastRow = sheet.getLastRow();
     return sheet
       .getRange(2, 1, lastRow, 1)
@@ -12,7 +12,7 @@ export class TransactionSpreadsheetRepository {
   }
 
   appendTransactions(transactions: TransactionResponse[][]): void {
-    const sheet = UtilService.getSheetByName('CreditCard');
+    const sheet = UtilService.getSheet();
     const lastRow = sheet.getLastRow();
 
     const sheetData: (string | Date | number)[][] = transactions.map((t) => [
