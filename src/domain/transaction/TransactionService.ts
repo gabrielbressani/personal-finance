@@ -7,16 +7,20 @@ export class TransactionService {
   listBetweenDates(accountId: string, from: Date, to: Date): Transaction[] {
     return this.transactionApi.listBetweenDates(accountId, from, to).flatMap((transaction) => {
       if (transaction.creditCardMetadata) {
-        return this.split(transaction, transaction.creditCardMetadata.totalInstallments);
+        return this.split(
+          transaction,
+          transaction.creditCardMetadata.installmentNumber,
+          transaction.creditCardMetadata.totalInstallments,
+        );
       }
       return transaction;
     });
   }
 
-  private split(t: Transaction, totalInstallments: number) {
+  private split(t: Transaction, installmentNumber: number, totalInstallments: number) {
     const installments = [];
 
-    for (let i = 1; i <= totalInstallments; i++) {
+    for (let i = installmentNumber; i <= totalInstallments; i++) {
       const transactionDate = new Date(t.date.getTime());
       new Date(t.date.getTime()).setMonth(t.date.getMonth() + i - 1);
 
