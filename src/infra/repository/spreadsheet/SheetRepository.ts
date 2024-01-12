@@ -9,11 +9,11 @@ export abstract class SheetRepository {
     return UtilService.getSheet().getName() === this.sheetName;
   }
 
-  update(sheetData: SheetData, sortColumn: number | null = null): void {
+  update(sheetData: SheetData, sortColumn: number | null = null, row: number = 2): void {
     const sheet = this.getSheet();
 
     if (sheetData.length)
-      sheet.getRange(2, 1, sheetData.length, sheetData[0].length).setValues(sheetData);
+      sheet.getRange(row, 1, sheetData.length, sheetData[0].length).setValues(sheetData);
 
     if (sortColumn) this.sortSheet(sortColumn, true);
   }

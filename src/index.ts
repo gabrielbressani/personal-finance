@@ -2,6 +2,7 @@
 import { CreditTransactionView } from './application/transaction/CreditTransactionView';
 import { AccountView } from './application/account/AccountView';
 import { CheckingAccountTransactionView } from './application/transaction/CheckingAccountTransactionView';
+import { CategoryView } from './application/category/CategoryView';
 
 function onOpen() {
   const menu = SpreadsheetApp.getUi().createAddonMenu();
@@ -37,5 +38,5 @@ function updateAccountsBalance() {
 }
 
 function updateCategories() {
-  SpreadsheetApp.getUi().alert('Não implementado');
+  new CategoryView().list();
 }
