@@ -43,6 +43,6 @@ export class AccountView {
       sheetData.push([bankName, accountsBalance]);
     }
 
-    this.accountSpreadsheetRepository.updateAccountsBalance(sheetData);
+    this.accountSpreadsheetRepository.update(sheetData);
   }
 }

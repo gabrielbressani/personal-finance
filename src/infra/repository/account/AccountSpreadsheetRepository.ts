@@ -1,12 +1,8 @@
-import { UtilService } from '../../../UtilService';
+import { SheetRepository } from '../spreadsheet/SheetRepository';
+import { SheetsName } from '../spreadsheet/SheetsName';
 
-export class AccountSpreadsheetRepository {
-  updateAccountsBalance(sheetData: (string | Date | number)[][]): void {
-    const sheet = UtilService.getSheet('CONTAS');
-
-    const lastRow = sheet.getLastRow();
-
-    if (sheetData.length)
-      sheet.getRange(lastRow + 1, 1, sheetData.length, sheetData[0].length).setValues(sheetData);
+export class AccountSpreadsheetRepository extends SheetRepository {
+  constructor() {
+    super(SheetsName.DASHBOARD);
   }
 }
