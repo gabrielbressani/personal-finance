@@ -1,21 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TransactionView } from './application/transaction/TransactionView';
 import { AccountView } from './application/AccountView';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function onOpen() {
   const menu = SpreadsheetApp.getUi().createAddonMenu();
-  menu.addItem('Saldo', 'appendNewAvailableTransactions');
-  menu.addItem('Transações', 'appendNewAvailableTransactions');
-  menu.addItem('Pedir atualização de contas', 'refreshAccounts');
+  menu.addItem('Pedir atualização das contas', 'requestAccountsRefresh');
+  menu.addItem('Atualizar saldo das contas', 'updateAccountsBalance');
+  menu.addItem('Baixar transações', 'appendNewTransactions');
   menu.addToUi();
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function appendNewAvailableTransactions() {
-  new TransactionView().appendNewTransactions();
+function requestAccountsRefresh() {
+  new AccountView().requestAccountsRefresh();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function refreshAccounts() {
-  new AccountView().requestAccountsRefresh();
+function updateAccountsBalance() {
+  new AccountView().updateAccountsBalance();
+}
+
+function appendNewTransactions() {
+  new TransactionView().appendNewTransactions();
 }

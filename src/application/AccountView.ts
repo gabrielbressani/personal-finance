@@ -1,5 +1,7 @@
 import { UtilService } from '../UtilService';
 import { AccountApi } from '../infra/repository/account/AccountApi';
+import { Account } from '../domain/account/Account';
+import { AccountSpreadsheetRepository } from '../infra/repository/account/AccountSpreadsheetRepository';
 
 export class AccountView {
   constructor(
@@ -11,6 +13,7 @@ export class AccountView {
       ['ItauCeci', '46924458-fa34-434d-958b-3f8761b35abf'],
     ]),
     private readonly accountApi = new AccountApi(),
+    private readonly accountSpreadsheetRepository = new AccountSpreadsheetRepository(),
   ) {}
 
   requestAccountsRefresh(): void {
@@ -25,5 +28,21 @@ export class AccountView {
     SpreadsheetApp.getUi().alert(
       'Atualização solicitada. Levará 5 minutos até os dados estarem disponíveis.',
     );
+  }
+
+  updateAccountsBalance() {
+    const sheetData: (string | Date | number)[][] = [];
+
+    for (const [bankName, itemId] of this.items) {
+      const accounts = this.accountApi.getByItemId(itemId);
+
+      const accountsBalance = accounts.reduce((acc: number, account: Account) => {
+        return acc + account.balance;
+      }, 0);
+
+      sheetData.push([bankName, accountsBalance]);
+    }
+
+    this.accountSpreadsheetRepository.updateAccountsBalance(sheetData);
   }
 }

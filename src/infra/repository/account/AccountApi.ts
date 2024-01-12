@@ -1,4 +1,5 @@
 import { PluggyApi } from '../PluggyApi';
+import { Account } from '../../../domain/account/Account';
 
 export class AccountApi {
   constructor(private readonly pluggyApi = new PluggyApi()) {}
@@ -10,12 +11,21 @@ export class AccountApi {
           token: token,
         },
       };
-      this.pluggyApi.doRequest('patch', '/items/' + itemId, {
+      this.pluggyApi.doRequest('patch', `/items/${itemId}`, {
         contentType: 'application/json',
         payload: JSON.stringify(payload),
       });
     }
 
-    this.pluggyApi.doRequest('patch', '/items/' + itemId);
+    this.pluggyApi.doRequest('patch', `/items/${itemId}`);
+  }
+
+  getByItemId(itemId: string) {
+    const response = this.pluggyApi.doRequest('get', `/accounts?itemId=${itemId}&type=BANK`);
+
+    return response.results.map(
+      (a: never) =>
+        new Account(a['id'], a['type'], a['subtype'], a['name'], a['balance'], a['currencyCode']),
+    );
   }
 }
