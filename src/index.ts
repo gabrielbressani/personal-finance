@@ -8,9 +8,12 @@ function onOpen() {
   // menu.addItem('Cadastrar novas contas', 'addNewAccounts');
   menu.addItem('Pedir atualização manual de contas', 'requestAccountsRefresh');
   menu.addSeparator();
+  menu.addItem('Atualizar dashboard', 'updateAccountsBalance');
+  menu.addSeparator();
   menu.addItem('Atualizar transações de crédito', 'appendNewCreditTransactions');
   menu.addItem('Atualizar transações de conta corrente', 'appendNewCheckingAccountTransactions');
-  menu.addItem('Atualizar dashboard', 'updateAccountsBalance');
+  menu.addSeparator();
+  menu.addItem('Atualizar categorias', 'updateCategories');
   menu.addToUi();
 }
 
@@ -31,4 +34,8 @@ function appendNewCheckingAccountTransactions() {
 
 function updateAccountsBalance() {
   new AccountView().updateAccountsBalance();
+}
+
+function updateCategories() {
+  SpreadsheetApp.getUi().alert('Não implementado');
 }
