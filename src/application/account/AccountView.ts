@@ -1,7 +1,7 @@
-import { UtilService } from '../UtilService';
-import { AccountApi } from '../infra/repository/account/AccountApi';
-import { Account } from '../domain/account/Account';
-import { AccountSpreadsheetRepository } from '../infra/repository/account/AccountSpreadsheetRepository';
+import { UtilService } from '../../UtilService';
+import { AccountApi } from '../../infra/repository/account/AccountApi';
+import { Account } from '../../domain/account/Account';
+import { AccountSpreadsheetRepository } from '../../infra/repository/account/AccountSpreadsheetRepository';
 
 export class AccountView {
   constructor(

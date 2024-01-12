@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TransactionView } from './application/transaction/TransactionView';
-import { AccountView } from './application/AccountView';
+import { AccountView } from './application/account/AccountView';
 
 function onOpen() {
   const menu = SpreadsheetApp.getUi().createAddonMenu();

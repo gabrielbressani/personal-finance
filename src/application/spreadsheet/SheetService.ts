@@ -1,5 +1,6 @@
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
-import { UtilService } from './UtilService';
+import { UtilService } from '../../UtilService';
+import { SheetsName } from './SheetsName';
 
 export class SheetService {
   static createInitialFile(prefix: string): Spreadsheet {
@@ -8,5 +9,9 @@ export class SheetService {
     const range = ss.getRange('A1');
     range.setValue('Hello, clasp!');
     return ss;
+  }
+
+  isActive(sheetName: SheetsName): boolean {
+    return UtilService.getSheet().getName() === sheetName;
   }
 }
