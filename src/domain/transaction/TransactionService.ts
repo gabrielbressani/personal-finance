@@ -1,6 +1,7 @@
 import { Transaction } from './Transaction';
 import { TransactionApi } from '../../infra/repository/transaction/TransactionApi';
 import { TransactionSpreadsheetRepository } from '../../infra/repository/transaction/TransactionSpreadsheetRepository';
+import { SheetData } from '../../infra/repository/spreadsheet/SheetData';
 
 export class TransactionService {
   constructor(
@@ -8,10 +9,10 @@ export class TransactionService {
     private readonly transactionSpreadsheetRepository = new TransactionSpreadsheetRepository(),
   ) {}
 
-  listBetweenDates(accountId: string, from: Date, to: Date): Transaction[] {
+  addBetweenDates(accountId: string, from: Date, to: Date): void {
     const sheetsTransactions = this.transactionSpreadsheetRepository.listTransactionsIdsFromSheet();
 
-    return this.transactionApi
+    const transactions = this.transactionApi
       .listBetweenDates(accountId, from, to)
       .filter((t) => !sheetsTransactions.includes(t.id))
       .flatMap((transaction) => {
@@ -24,6 +25,17 @@ export class TransactionService {
         }
         return transaction;
       });
+
+    const sheetData: SheetData = transactions.map((transaction) => [
+      transaction.id,
+      transaction.date,
+      transaction.description,
+      transaction.category,
+      transaction.type,
+      transaction.amount,
+    ]);
+
+    this.transactionSpreadsheetRepository.add(sheetData);
   }
 
   private split(t: Transaction, installmentNumber: number, totalInstallments: number) {

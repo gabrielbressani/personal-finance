@@ -32,10 +32,4 @@ export class UtilService {
     if (!sheet) throw new Error(`${name} not found`);
     return sheet;
   }
-
-  static sortSheet(column: number, ascending: boolean): void {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const range = sheet.getRange(2, 1, sheet.getLastRow(), sheet.getLastColumn());
-    range.sort({ column: column, ascending: ascending });
-  }
 }
