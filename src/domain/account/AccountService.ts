@@ -6,10 +6,10 @@ import { SheetData } from '../../infra/repository/spreadsheet/SheetData';
 export class AccountService {
   private readonly items = new Map([
     ['Bradesco', '8c11c231-3476-4fb4-bae9-b73f47e2fd39'],
-    ['NubankGabriel', 'fa818bb4-31ea-427c-9b4e-1210c2bf49e1'],
-    ['NubankCeci', 'e0f8ea76-3a99-4dc0-b7dc-b6c2ceb0098c'],
-    ['ItauGabriel', '4130e304-fba6-4b8c-8131-e34b045664b6'],
-    ['ItauCeci', '46924458-fa34-434d-958b-3f8761b35abf'],
+    ['Nu - Gabriel', 'fa818bb4-31ea-427c-9b4e-1210c2bf49e1'],
+    ['Nu - Ceci', 'e0f8ea76-3a99-4dc0-b7dc-b6c2ceb0098c'],
+    ['ItaÚ - Gabriel', '4130e304-fba6-4b8c-8131-e34b045664b6'],
+    ['ItaÚ - Ceci', '46924458-fa34-434d-958b-3f8761b35abf'],
   ]);
 
   constructor(

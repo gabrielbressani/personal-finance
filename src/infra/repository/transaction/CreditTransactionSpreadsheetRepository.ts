@@ -1,15 +1,11 @@
 import { SheetRepository } from '../spreadsheet/SheetRepository';
 import { SheetsName } from '../spreadsheet/SheetsName';
-import { UtilService } from '../../../UtilService';
 
-export class TransactionSpreadsheetRepository extends SheetRepository {
+export class CreditTransactionSpreadsheetRepository extends SheetRepository {
   constructor() {
-    const sheetName =
-      UtilService.getSheet().getName() === SheetsName.CREDIT_CARD
-        ? SheetsName.CREDIT_CARD
-        : SheetsName.CHECKING_ACCOUNT;
-    super(sheetName);
+    super(SheetsName.CREDIT_CARD);
   }
+
   listTransactionsIdsFromSheet(): string[] {
     const sheet = this.getSheet();
     const lastRow = sheet.getLastRow();

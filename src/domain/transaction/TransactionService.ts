@@ -1,12 +1,12 @@
 import { Transaction } from './Transaction';
 import { TransactionApi } from '../../infra/repository/transaction/TransactionApi';
-import { TransactionSpreadsheetRepository } from '../../infra/repository/transaction/TransactionSpreadsheetRepository';
+import { CreditTransactionSpreadsheetRepository } from '../../infra/repository/transaction/CreditTransactionSpreadsheetRepository';
 import { SheetData } from '../../infra/repository/spreadsheet/SheetData';
 
-export class TransactionService {
+export abstract class TransactionService {
   constructor(
-    private readonly transactionApi = new TransactionApi(),
-    private readonly transactionSpreadsheetRepository = new TransactionSpreadsheetRepository(),
+    private readonly transactionApi: TransactionApi,
+    private readonly transactionSpreadsheetRepository: CreditTransactionSpreadsheetRepository,
   ) {}
 
   addBetweenDates(accountId: string, from: Date, to: Date): void {
@@ -15,6 +15,7 @@ export class TransactionService {
     const transactions = this.transactionApi
       .listBetweenDates(accountId, from, to)
       .filter((t) => !sheetsTransactions.includes(t.id))
+      .filter((t) => this.getFilterPredicate(t))
       .flatMap((transaction) => {
         if (transaction.creditCardMetadata) {
           return this.split(
@@ -35,7 +36,12 @@ export class TransactionService {
       transaction.amount,
     ]);
 
-    this.transactionSpreadsheetRepository.add(sheetData);
+    this.transactionSpreadsheetRepository.add(sheetData, 2);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getFilterPredicate(transaction: Transaction): boolean {
+    return true;
   }
 
   private split(t: Transaction, installmentNumber: number, totalInstallments: number) {
