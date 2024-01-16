@@ -14,7 +14,6 @@ export abstract class TransactionService {
 
     const transactions = this.transactionApi
       .listBetweenDates(accountId, from, to)
-      .filter((t) => !sheetsTransactions.includes(t.id))
       .filter((t) => this.getFilterPredicate(t))
       .flatMap((transaction) => {
         if (transaction.creditCardMetadata) {
@@ -25,7 +24,8 @@ export abstract class TransactionService {
           );
         }
         return transaction;
-      });
+      })
+      .filter((t) => !sheetsTransactions.includes(t.id));
 
     const sheetData: SheetData = transactions.map((transaction) => [
       transaction.id,
