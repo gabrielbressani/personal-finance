@@ -9,7 +9,7 @@ export class CategoryApi {
 
     return response.results.map(
       (c: never) =>
-        new Category(c['description'], c['descriptionTranslated'], c['parentDescription']),
+        new Category(c['id'], c['description'], c['descriptionTranslated'], c['parentDescription']),
     );
   }
 }

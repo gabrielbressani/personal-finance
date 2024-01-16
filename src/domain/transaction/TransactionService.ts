@@ -2,15 +2,18 @@ import { Transaction } from './Transaction';
 import { TransactionApi } from '../../infra/repository/transaction/TransactionApi';
 import { CreditTransactionSpreadsheetRepository } from '../../infra/repository/transaction/CreditTransactionSpreadsheetRepository';
 import { SheetData } from '../../infra/repository/spreadsheet/SheetData';
+import { CategoryApi } from '../../infra/repository/category/CategoryApi';
 
 export abstract class TransactionService {
   constructor(
     private readonly transactionApi: TransactionApi,
+    private readonly categoryApi: CategoryApi,
     private readonly transactionSpreadsheetRepository: CreditTransactionSpreadsheetRepository,
   ) {}
 
   addBetweenDates(accountId: string, from: Date, to: Date): void {
     const sheetsTransactions = this.transactionSpreadsheetRepository.listTransactionsIdsFromSheet();
+    const categories = this.categoryApi.list();
 
     const transactions = this.transactionApi
       .listBetweenDates(accountId, from, to)
@@ -27,14 +30,19 @@ export abstract class TransactionService {
       })
       .filter((t) => !sheetsTransactions.includes(t.id));
 
-    const sheetData: SheetData = transactions.map((transaction) => [
-      transaction.id,
-      transaction.date,
-      transaction.description,
-      transaction.category,
-      transaction.type,
-      transaction.amount,
-    ]);
+    const sheetData: SheetData = transactions.map((transaction) => {
+      const category = categories.find((c) => c.id === transaction.categoryId);
+      const translatedCategory = category ? category.descriptionTranslated : transaction.category;
+
+      return [
+        transaction.id,
+        transaction.date,
+        transaction.description,
+        translatedCategory,
+        transaction.type,
+        transaction.amount,
+      ];
+    });
 
     this.transactionSpreadsheetRepository.add(sheetData, 2);
   }
