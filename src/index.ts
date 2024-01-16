@@ -6,21 +6,27 @@ import { CategoryView } from './application/category/CategoryView';
 
 function onOpen() {
   const menu = SpreadsheetApp.getUi().createAddonMenu();
-  menu.addItem('Peparar planilha para o primeiro uso', 'prepareSpreadsheet');
-  menu.addSeparator();
-  menu.addItem('Cadastrar novas contas', 'addNewAccounts');
-  menu.addItem('Pedir atualização manual de contas', 'requestAccountsRefresh');
+
+  const accountSubmenu = SpreadsheetApp.getUi().createMenu('Contas');
+  accountSubmenu.addItem('Baixar dados das contas', 'requestAccountsRefresh');
+  accountSubmenu.addSeparator();
+  accountSubmenu.addItem('Atualizar todas as abas', 'refreshAllTabs');
+  accountSubmenu.addSeparator();
+  accountSubmenu.addItem('Atualizar cartão de crédito', 'appendNewCreditTransactions');
+  accountSubmenu.addItem('Atualizar conta corrente', 'appendNewCheckingAccountTransactions');
+  accountSubmenu.addItem('Atualizar dashboard', 'updateAccountsBalance');
+  menu.addSubMenu(accountSubmenu);
+
   menu.addSeparator();
   menu.addItem('Checar reembolsos', 'checkRefunds');
   menu.addSeparator();
-  menu.addItem('Atualizar dashboard', 'updateAccountsBalance');
-  menu.addSeparator();
-  menu.addItem('Atualizar todas as abas', 'refreshAllTabs');
-  menu.addSeparator();
-  menu.addItem('Atualizar transações de crédito', 'appendNewCreditTransactions');
-  menu.addItem('Atualizar transações de conta corrente', 'appendNewCheckingAccountTransactions');
-  menu.addSeparator();
-  menu.addItem('Atualizar categorias', 'updateCategories');
+
+  const settingsSubMenu = SpreadsheetApp.getUi().createMenu('Configurações');
+  settingsSubMenu.addItem('Peparar planilha para o primeiro uso', 'prepareSpreadsheet');
+  settingsSubMenu.addItem('Cadastrar novas contas', 'addNewAccounts');
+  settingsSubMenu.addItem('Atualizar categorias', 'updateCategories');
+  menu.addSubMenu(settingsSubMenu);
+
   menu.addToUi();
 }
 function requestAccountsRefresh() {
