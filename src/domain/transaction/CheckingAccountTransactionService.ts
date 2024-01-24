@@ -14,6 +14,7 @@ export class CheckingAccountTransactionService extends TransactionService {
       transaction.description.includes('Transf Entre Contas') ||
       transaction.description.includes('Aplic.invest Facil') ||
       transaction.description.includes('Aplicacao Cdb') ||
+      transaction.description.includes('Aplicacao Automatica') ||
       transaction.description.includes('Resgate Invest Facil') ||
       transaction.description.includes('Resg Automatico Investim') ||
       transaction.description.includes('Resg/vencto Cdb')
